@@ -8,15 +8,15 @@
     <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
     <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
 
-    <title>Pomona by okb</title>
+    <title>{{ page.title }}</title>
   </head>
 
   <body>
 
     <header>
       <div class="container">
-        <h1>Pomona</h1>
-        <h2>The goddess of fruit trees, garden, and orchards</h2>
+        <h1>{{ page.title }}</h1>
+        <h2>{{ page.subtitle }}</h2>
 
         <section id="downloads">
           <a href="https://github.com/okb/Pomona/zipball/master" class="btn">Download as .zip</a>
@@ -28,7 +28,7 @@
 
     <div class="container">
       <section id="main_content">
-        {{content}}
+        {{ content }}
       </section>
     </div>
 
