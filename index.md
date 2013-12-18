@@ -4,7 +4,8 @@ title: Pōmōna
 subtitle: A fruitful way to REST
 ---
 
-# Pōmōna. The DTO-free way to REST for lazy people!
+# Pōmōna
+## The DTO-free way to REST for lazy people!
 
 Pōmōna is all about exposing your domain model as a REST API. With less pain.
 
