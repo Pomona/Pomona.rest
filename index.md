@@ -10,11 +10,11 @@ subtitle: A fruitful way to REST
 Pōmōna is all about exposing your domain model as a REST API. With less pain.
 
 It was born out of my personal experience with being bored from manually implementing
-a whole new layer of DTO (Data Transfer Object) and mapping, with the feeling that I
-was repeating myself over and over.
+a whole new layer of [DTO](http://martinfowler.com/eaaCatalog/dataTransferObject.html)
+and mapping, with the feeling that I was repeating myself over and over.
 
 So the goal is that Pōmōna will offer a way to do this mapping and (de)serialization
-by convention, and remove the need for DTO's all together. This shall be achieved by:
+by convention, and remove the need for DTO's all together. This is achieved by:
 
 * Supporting custom conventions, with a good set of default ways to do things.
 * Expose an API to override these conventions for special cases. (TODO)
@@ -74,7 +74,6 @@ You can also `POST` to `http://localhost:2211/critter` create a new critter enti
 
 ## Roadmap for first release
 
-Features:
 * Add tests for serialization and deserialization on client DONE
 * Create IPomonaDataSource, for retrieval of data. DONE
 * Create PomonaSession and PōmōnaSessionFactory that will bind everything together.
@@ -99,6 +98,7 @@ Features:
 ## Implementation of automatic API compatibility checking
 
 For this to work we need to:
+
 * Have a api schema folder specified.
 * Have a method writing out existing schemas with version numbering: {api-name}.{version}.json
 * Find a way to whitelist a breaking API change.
@@ -107,12 +107,11 @@ For this to work we need to:
 
 ## Random ideas
 
-* Could make query mechanism pluggable, through some sort of `IHttpQueryTranslator`.
-  Then we could provide a simple default implementation.
-
+* Could make query mechanism pluggable, through some sort of `IHttpQueryTranslator`. Then we
+  could provide a simple default implementation.
 * An exotic side-project could be to implement an `IHttpQueryTranslator` that uses relinq
-  to serialize and convert LINQ expressions, which then can be executed on Nhibernate or other ORM.
-  This does however seem a bit dangerous with regards to security.
+  to serialize and convert LINQ expressions, which then can be executed on Nhibernate or other
+  ORM. This does however seem a bit dangerous with regard to security.
 
 ## Automated batching of queries to decrease N+1 performance problems
 
