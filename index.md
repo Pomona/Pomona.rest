@@ -39,12 +39,12 @@ My personal goal is to release a version 1.0 before christmas. But no promises, 
 
 ## On the shoulders of really cool people:
 
-* [JSON.NET](ttp://james.newtonking.com/projects/json-net.aspx) for serialization stuff. h
+* [JSON.NET](ttp://james.newtonking.com/projects/json-net.aspx) for serialization stuff.
 * [Nancy](http://nancyfx.org/) for hosting the web service. 
   I really love Nancy! I can't overstate how good I think it is! <3 <3 <3
   One day I hope Pōmōna will offer a Super-Duper-Happy path just like it.
 * [NUnit](http://www.nunit.org/) for testing.
-* [Cecil](http://www.mono-project.com/Cecil) for generation of Client dll.
+* [Cecil](http://www.mono-project.com/Cecil) for generation of the Client dll.
 * [google-code-prettify](http://code.google.com/p/google-code-prettify/) for presenting JSON as HTML.
 
 A huge thank you to all the authors of these projects.
