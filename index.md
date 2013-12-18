@@ -122,7 +122,8 @@ this could be detected runtime and fixed.
 
 This is one way to do it (by example). We got two simple entity types:
 
-Customer example:
+### Customer example
+
 ```json
 {
     "name" : "The first name",
@@ -132,7 +133,8 @@ Customer example:
 }
 ```
 
-Order example:
+### Order example
+
 ```json
 {
     "_uri" : "http://blah/order/1",
