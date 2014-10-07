@@ -55,12 +55,24 @@ header h1 {
                0 0 10px rgba(181, 232, 83, 0.1);
   letter-spacing: -1px;
   -webkit-font-smoothing: antialiased;
+  position: relative;
 }
 
 header h1:before {
   content: "./ ";
   font-size: 24px;
 }
+
+header h1:after {
+  content: " ";
+  background: transparent url('../images/pomona-icon-626.png') top left no-repeat;  
+  width: 626px;
+  height: 626px;
+  position: absolute;
+  left: -150px;
+  top: 150px;
+}
+
 
 header h2 {
   font-size: 18px;
@@ -80,7 +92,9 @@ header h2 {
 #main_content {
   width: 100%;
   -webkit-font-smoothing: antialiased;
+  position: relative;
 }
+
 section img {
   max-width: 100%
 }
