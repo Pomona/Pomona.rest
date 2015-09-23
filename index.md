@@ -1,5 +1,8 @@
-![Pōmōna](https://raw.githubusercontent.com/okb/Pomona/gh-pages/images/pomona-icon-512.png)
-
+----
+-layout: index
+-title: Pōmōna
+-subtitle: A fruitful way to REST
+----
 # Pomona
 
 Pomona is a framework built for exposing a domain model in a RESTful and hypermedia-driven manner.
