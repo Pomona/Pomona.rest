@@ -1,8 +1,8 @@
-----
--layout: index
--title: Pōmōna
--subtitle: A fruitful way to REST
-----
+---
+layout: index
+title: Pōmōna
+subtitle: A fruitful way to REST
+---
 
 # Pomona
 
