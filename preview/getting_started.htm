@@ -83,7 +83,153 @@
 			      	<div id="main-pane">
 			      		<!--Title:Getting started-->
 <!--Url:getting_started-->
-<p>TODO(Write some content!)</p>
+<p>Here we will guide you through the steps needed to create a very basic Pomona
+service.</p>
+<p>This example is also available in the Pomona repository in the
+<code>samples/Pomona.Samples.DustyBoxes1</code> folder of the
+<a href="https://github.com/Pomona/Pomona">Pomona source</a>.</p>
+<h2>Installing</h2>
+<p>We start by creating a new C# console project and install the [Pomona NuGet package]
+(http://www.nuget.org/packages/Pomona/) from the standard NuGet feed.</p>
+<pre><code>PM&gt; Install-Package Pomona
+</code></pre>
+<p><em>Note: We make a command line project so we can run this as a self-hosted Nancy host. In a real life example we would probably use another type of project.</em></p>
+<h3>The domain model</h3>
+<p>Now that we have a empty project we need some domain model to expose.</p>
+<pre><code class="language-csharp">
+    public class GameConsole
+    {
+        public string Id { get; set; }
+        public string Name { get; set; }
+    }
+</code></pre>
+<p><em>Every resource should have some id, which will be used as part of the URL.</em></p>
+<h3>Setting up a module</h3>
+<p>Then we need to create a module,</p>
+<pre><code class="language-csharp">
+    [PomonaConfiguration(typeof(DustyConfiguration))]
+    public class DustyModule : PomonaModule
+    {
+    }
+</code></pre>
+<p>..and also a corresponding configuration class.</p>
+<pre><code class="language-csharp">
+    public class DustyConfiguration : PomonaConfigurationBase
+    {
+        public override IEnumerable&lt;object&gt; FluentRuleObjects =&gt; new object[] { new DustyRules() };
+        public override IEnumerable&lt;Type&gt; SourceTypes =&gt; new[] { typeof(GameConsole) };
+
+        public class DustyRules
+        {
+            public void Map(ITypeMappingConfigurator&lt;GameConsole&gt; gameConsole)
+            {
+                gameConsole.HandledBy&lt;GameConsoleHandler&gt;();
+            }
+        }
+    }
+
+</code></pre>
+<p>The configuration above have two properties overridden.</p>
+<ul>
+<li><code>FluentRuleObjects</code> returns a list containing one rule object <code>DustyRules</code>,
+which will be scanned for mapping rules.</li>
+<li><code>SourceTypes</code> returns a list of the domain objects to be mapped.</li>
+</ul>
+<h3>Handling resource requests</h3>
+<p>In the <code>Map</code> method of the <code>DustyRules</code> we defined that <code>GameConsoleHandler</code> will
+handle requests for the <code>GameConsole</code> resource.</p>
+<p>Now we need to actually implement this handler class:</p>
+<pre><code class="language-csharp">
+    public class GameConsoleHandler
+    {
+        public IQueryable&lt;GameConsole&gt; Query()
+        {
+            return
+                new[]
+                {
+                    new GameConsole() { Id = &quot;a2600&quot;, Name = &quot;Atari 2600&quot; },
+                    new GameConsole() { Id = &quot;gameboy&quot;, Name = &quot;Game Boy&quot; },
+                    new GameConsole() { Id = &quot;nes&quot;, Name = &quot;Nintendo Entertainment System&quot; },
+                }.AsQueryable();
+        }
+    }
+</code></pre>
+<p>For exposing a read-only collection of resources we just need to define one method
+returning an <code>IQueryable&lt;GameConsole&gt;</code>.</p>
+<p>Usually you would proabably use a LINQ provider here, like the one in <a href="http://nhibernate.info/">NHibernate</a> or <a href="http://www.asp.net/entity-framework">Entity Framework</a>. But for now we'll just use an in-memory array.</p>
+<h3>Running the service</h3>
+<p>At this point our project should contain the following classes:</p>
+<ul>
+<li><code>GameConsole</code> - Our domain object</li>
+<li><code>GameConsoleHandler</code> - Handler for <code>GameConsole</code></li>
+<li><code>DustyConfiguration</code> - Configuration for Pomona module</li>
+<li><code>DustyModule</code> - The Pomona module</li>
+<li><code>Program</code> - The console app startup class</li>
+</ul>
+<p>As mentioned earlier we will be using Nancy self host for this example. For this
+the package <a href="http://www.nuget.org/packages/Nancy.Hosting.Self">Nancy.Hosting.Self</a>
+must be installed from the NuGet gallery.</p>
+<pre><code>PM&gt; Install-Package Nancy.Hosting.Self
+</code></pre>
+<p>We also need to modify our <code>Progam.cs</code> file to actually bootstrap and fire up
+a local http server.</p>
+<pre><code class="language-csharp">
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            var baseUri = new Uri(&quot;http://localhost:1337&quot;);
+            var nancyHost =
+                new NancyHost(new HostConfiguration()
+                {
+                    // To show annoying UAC dialog in windows when not running as admin
+                    UrlReservations = new UrlReservations() { CreateAutomatically = true }
+                }, baseUri);
+            nancyHost.Start();
+
+            // Automatically launch web browser
+            Process.Start(baseUri.ToString());
+
+            Console.WriteLine($&quot;Starting server on {baseUri}, press enter to stop..&quot;);
+            Console.ReadLine();
+            nancyHost.Stop();
+        }
+    }
+</code></pre>
+<p>Now our example should be able to compile, run and be explored at <a href="http://localhost:1337">http://localhost:1337</a>.</p>
+<pre><code class="language-git">$ curl http://localhost:1337 -H &quot;Accept: application/json&quot;
+{
+  &quot;game-consoles&quot;: &quot;http://localhost:1337/game-consoles&quot;
+}
+</code></pre>
+<pre><code class="language-git">C:\&gt;curl http://localhost:1337/game-consoles -H &quot;Accept: application/json&quot;
+{
+  &quot;_type&quot;: &quot;__result__&quot;,
+  &quot;totalCount&quot;: -1,
+  &quot;items&quot;: [
+    {
+      &quot;_uri&quot;: &quot;http://localhost:1337/game-consoles/a2600&quot;,
+      &quot;id&quot;: &quot;a2600&quot;,
+      &quot;name&quot;: &quot;Atari 2600&quot;
+    },
+    {
+      &quot;_uri&quot;: &quot;http://localhost:1337/game-consoles/gameboy&quot;,
+      &quot;id&quot;: &quot;gameboy&quot;,
+      &quot;name&quot;: &quot;Game Boy&quot;
+    },
+    {
+      &quot;_uri&quot;: &quot;http://localhost:1337/game-consoles/nes&quot;,
+      &quot;id&quot;: &quot;nes&quot;,
+      &quot;name&quot;: &quot;Nintendo Entertainment System&quot;
+    }
+  ],
+  &quot;skip&quot;: 0,
+  &quot;previous&quot;: null,
+  &quot;next&quot;: null
+}
+</code></pre>
+<p>And there you have it, <strong>congratulations</strong>, you have just completed our little
+tutorial. Read the following chapters of the documentation for further experimentation,</p>
 
 
 			      	</div>

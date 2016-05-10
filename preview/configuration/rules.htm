@@ -83,7 +83,33 @@
 			      	<div id="main-pane">
 			      		<!--Title:Type rules-->
 <!--Url:rules-->
-<p>TODO(Write some content!)</p>
+<p>The mapping configuration for a specific type can be defined as a method in
+any class.</p>
+<pre><code class="language-csharp">
+    public class FluentRules
+    {
+        public void Map(ITypeMappingConfigurator&lt;Customer&gt; map)
+        {
+            map.Exclude(x =&gt; x.Password);
+            map.Include(x =&gt; x.Name);
+            map.Include(x =&gt; x.Identifier, o =&gt; o.AsPrimaryKey());
+        }
+    }
+</code></pre>
+<p>Any object containing fluent rules must be returned from the <code>FluentRuleObjects</code>
+property of your configuration class to be considered:</p>
+<pre><code class="language-csharp">
+    public class Configuration : PomonaConfigurationBase
+    {
+        public override IEnumerable&lt;object&gt; FluentRuleObjects
+        {
+            get { yield return new FluentRules();}
+        }
+    }
+</code></pre>
+<h2>Type options</h2>
+<p>Type options are defined through the <code>ITypeMappingConfigurator&lt;T&gt;</code> interface.</p>
+<h2>Property options</h2>
 
 
 			      	</div>
