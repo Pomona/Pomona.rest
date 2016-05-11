@@ -5,7 +5,7 @@
         <meta charset="utf-8">
         <meta name="generator" content="Bootply" />
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-		<title>Pomona - Type rules</title>
+		<title>Pomona - Fluent rules</title>
 		<link href="../content/bootstrap.min.css" rel="stylesheet" type="text/css" />
 		<link href="../content/prism.css" rel="stylesheet" type="text/css" />
 		<link href="../content/theme.css" rel="stylesheet" type="text/css" />
@@ -37,7 +37,7 @@
 <a href="https://gitter.im/Pomona/Pomona?utm_source=badge&amp;utm_medium=badge&amp;utm_campaign=pr-badge&amp;utm_content=badge"><img src="https://camo.githubusercontent.com/da2edb525cde1455a622c58c0effc3a90b9a181c/68747470733a2f2f6261646765732e6769747465722e696d2f4a6f696e253230436861742e737667" alt="Join the chat at https://gitter.im/Pomona/Pomona" data-canonical-src="https://badges.gitter.im/Join%20Chat.svg" style="max-width:100%;"></a>
 		        </li>
 		      	<li><a href="../configuration/index.htm" title="Configuration and bootstrapping">Previous</a></li>
-		      	<li><a href="../configuration/property_mapping.htm" title="Mapping properties">Next</a></li>
+		      	<li><a href="../configuration/convention.htm" title="Changing conventions">Next</a></li>
 		      </ul>
       <div class="navbar-form navbar-left" role="search">
         <div class="form-group">
@@ -52,7 +52,7 @@
 
 		  <div class="container">
 		  	<nav class="navbar-inverse">
-		  		<ol class="breadcrumb"><li><a href="../index.htm">Index</a></li><li><a href="../configuration/index.htm">Configuration and bootstrapping</a></li><li class="active">Type rules</li></ol>
+		  		<ol class="breadcrumb"><li><a href="../index.htm">Index</a></li><li><a href="../configuration/index.htm">Configuration and bootstrapping</a></li><li class="active">Fluent rules</li></ol>
 		  	</nav>
 		  </div>
 
@@ -68,7 +68,7 @@
 				<ul class="nav nav-stacked affix" id="sidebar">
 
 		        </ul>
-		        	<h3 class="no-margin">Next</h3><p><a href="../configuration/property_mapping.htm">Mapping properties</a></p>
+		        	<h3 class="no-margin">Next</h3><p><a href="../configuration/convention.htm">Changing conventions</a></p>
 		        	<h3 class="no-margin">Previous</h3><a href="../configuration/index.htm">Configuration and bootstrapping</a></p>
 
 		        </ul>
@@ -76,12 +76,12 @@
 
 		      <!--right-->
 		      <div class="col-md-9">
-			      	<h1>Type rules <a href="https://github.com/Pomona/Pomona/blob/master/documentation/configuration/rules.md"  class="text-muted small pull-right fa fa-github" style="margin-top: 10px"> Edit on GitHub</a></h1>
+			      	<h1>Fluent rules <a href="https://github.com/Pomona/Pomona/blob/master/documentation/configuration/rules.md"  class="text-muted small pull-right fa fa-github" style="margin-top: 10px"> Edit on GitHub</a></h1>
 
 			      	<hr />
 
 			      	<div id="main-pane">
-			      		<!--Title:Type rules-->
+			      		<!--Title:Fluent rules-->
 <!--Url:rules-->
 <p>The mapping configuration for a specific type can be defined as a method in
 any class.</p>
@@ -107,9 +107,9 @@ property of your configuration class to be considered:</p>
         }
     }
 </code></pre>
-<h2>Type options</h2>
+<h1>Type options</h1>
 <p>Type options are defined through the <code>ITypeMappingConfigurator&lt;T&gt;</code> interface.</p>
-<h3>Ignoring properties</h3>
+<h2>Ignoring properties</h2>
 <p>A property can be ignored and hidden from the exposed resource by using the <code>Exclude</code> method.</p>
 <pre><code class="language-csharp">
         public void ExcludeRule(ITypeMappingConfigurator&lt;Customer&gt; customer)
@@ -117,7 +117,7 @@ property of your configuration class to be considered:</p>
             customer.Exclude(x =&gt; x.Password);
         }
 </code></pre>
-<h3>Selecting handler</h3>
+<h2>Selecting handler</h2>
 <p>A handler class can be chosen for a resource type by using the <code>HandledBy&lt;T&gt;</code> method.</p>
 <pre><code class="language-csharp">
         public void HandlerRule(ITypeMappingConfigurator&lt;Customer&gt; customer)
@@ -126,7 +126,7 @@ property of your configuration class to be considered:</p>
         }
 </code></pre>
 <p>You can find out more about this in <a href="../handlers/index.htm">Resource handlers</a></p>
-<h3>Treating type as a value object</h3>
+<h2>Treating type as a value object</h2>
 <p>We can treat a complex type as a value object, as opposed to a resource.
 A value object can be a part of resource or another value object, and has no URI.</p>
 <pre><code class="language-csharp">
@@ -136,7 +136,7 @@ A value object can be a part of resource or another value object, and has no URI
         }
 </code></pre>
 <p>You can learn more about value types in <a href="../type_system.htm">Type system</a></p>
-<h3>Custom construction of object</h3>
+<h2>Custom construction of object</h2>
 <p>When Pomona needs to instantiate a resource or value object type during deserialization,
 it uses the empty constructor by default if available.</p>
 <p>If we want to instantiate the object using a constructor or method taking parameters,
@@ -151,7 +151,7 @@ we can use the <code>ConstructedUsing</code> method.</p>
 argument.</p>
 <p>The <code>IConstructorControl&lt;T&gt;</code> parameter can then be used to bind properties with
 any corresponding parameters.</p>
-<h3>Constructor context</h3>
+<h2>Constructor context</h2>
 <p>If we need to access some service while instantiating a type we can use the <code>Context&lt;T&gt;()</code>
 method of <code>IConstructorControl&lt;T&gt;</code>.</p>
 <pre><code class="language-csharp">
@@ -162,7 +162,7 @@ method of <code>IConstructorControl&lt;T&gt;</code>.</p>
                       .CreateCustomer(c.Requires().Name, c.Optional().Password));
         }
 </code></pre>
-<h3>Specifying plural name of type</h3>
+<h2>Specifying plural name of type</h2>
 <p>Pomona will try to derive the plural name of a type by using a few simple rules,
 which works for a majority of English words.</p>
 <p>This value is used to generate the URI for a root resource collection type.</p>
@@ -172,7 +172,8 @@ which works for a majority of English words.</p>
             mouse.WithPluralName(&quot;Mice&quot;);
         }
 </code></pre>
-<h2>Property options</h2>
+<h1>Property options</h1>
+<p>TODO!</p>
 
 
 			      	</div>
@@ -186,7 +187,7 @@ which works for a majority of English words.</p>
 				        </span>
 				        <span class="pull-right">
 
-				        	<strong>Next: </strong><a href="../configuration/property_mapping.htm">Mapping properties</a>
+				        	<strong>Next: </strong><a href="../configuration/convention.htm">Changing conventions</a>
 
 				        </span>
 			      	</nav>
