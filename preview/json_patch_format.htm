@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+        <meta charset="utf-8">
+        <meta name="generator" content="Bootply" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title>Pomona - JSON PATCH Specification</title>
+		<link href="content/bootstrap.min.css" rel="stylesheet" type="text/css" />
+		<link href="content/prism.css" rel="stylesheet" type="text/css" />
+		<link href="content/theme.css" rel="stylesheet" type="text/css" />
+
+		<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" />
+        <link rel="apple-touch-icon" href="/bootstrap/img/apple-touch-icon.png">
+        <link rel="apple-touch-icon" sizes="72x72" href="/bootstrap/img/apple-touch-icon-72x72.png">
+        <link rel="apple-touch-icon" sizes="114x114" href="/bootstrap/img/apple-touch-icon-114x114.png">
+
+
+        <!-- CSS code from Bootply.com editor -->
+        <link href="content/affix.css" rel="stylesheet" type="text/css" />
+    </head>
+
+    <!-- HTML code from Bootply.com editor -->
+
+    <body  >
+
+<a href="https://github.com/Pomona/Pomona"><img style="z-index: 5000; position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/e7bbb0521b397edbd5fe43e7f760759336b5e05f/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677265656e5f3030373230302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_green_007200.png"></a>
+
+        <nav class="navbar navbar-default navbar-fixed-top" role="banner">
+		  <div class="container">
+		    <div class="navbar-header">
+		      <a href="index.htm" class="navbar-brand">Pomona</a>
+		    </div>
+		    <nav class="collapse navbar-collapse" role="navigation">
+		      <ul class="nav navbar-nav pull-right">
+		        <li>
+<a href="https://gitter.im/Pomona/Pomona?utm_source=badge&amp;utm_medium=badge&amp;utm_campaign=pr-badge&amp;utm_content=badge"><img src="https://camo.githubusercontent.com/da2edb525cde1455a622c58c0effc3a90b9a181c/68747470733a2f2f6261646765732e6769747465722e696d2f4a6f696e253230436861742e737667" alt="Join the chat at https://gitter.im/Pomona/Pomona" data-canonical-src="https://badges.gitter.im/Join%20Chat.svg" style="max-width:100%;"></a>
+		        </li>
+		      	<li><a href="rest/index.htm" title="Using exposed service">Previous</a></li>
+		      	
+		      </ul>
+      <div class="navbar-form navbar-left" role="search">
+        <div class="form-group">
+          <input id="search" type="search" class="form-control" placeholder="Search">
+        </div>
+      </div>
+
+		    </nav>
+
+		  </div>
+		</nav>
+
+		  <div class="container">
+		  	<nav class="navbar-inverse">
+		  		<ol class="breadcrumb"><li><a href="index.htm">Index</a></li><li class="active">JSON PATCH Specification</li></ol>
+		  	</nav>
+		  </div>
+
+		<!--main-->
+		<div class="container">
+			<div class="row">
+		      <!--left-->
+
+		      <div class="col-md-3" id="leftCol">
+		      	<h3>Pomona </h3>
+		      	<br />
+
+				<ul class="nav nav-stacked affix" id="sidebar">
+
+		        </ul>
+		        	
+		        	<h3 class="no-margin">Previous</h3><a href="rest/index.htm">Using exposed service</a></p>
+
+		        </ul>
+		      </div><!--/left-->
+
+		      <!--right-->
+		      <div class="col-md-9">
+			      	<h1>JSON PATCH Specification <a href="https://github.com/Pomona/Pomona/blob/master/documentation/json_patch_format.md"  class="text-muted small pull-right fa fa-github" style="margin-top: 10px"> Edit on GitHub</a></h1>
+
+			      	<hr />
+
+			      	<div id="main-pane">
+			      		<!--Title:JSON PATCH Specification-->
+<!--Url:json_patch_format-->
+<p>Pomona uses a custom PATCH format, which feels intuitive and straight-forward
+for simple cases, and that also can support more advanced scenarios.</p>
+<h2>Property operators:</h2>
+<ul>
+<li><code>!</code> - Replaces a property (object or array). When setting to a value type this is always the default operation, making the <code>!</code> optional.</li>
+<li><code>*</code> - Patches the existing object of a property (object or array).</li>
+<li><code>-</code> - Removes a property.</li>
+</ul>
+<h2>Array operators:</h2>
+<ul>
+<li><code>-@</code> - Indicates that an object item is removed from array using specificied identifier.</li>
+<li><code>*@</code> - Indicates that an object item is to be located in array using specified identifier, and then patched.</li>
+<li>Default operation is to add something to an array.</li>
+</ul>
+<h2>Escaping:</h2>
+<p>Property names starting with <code>-</code>, <code>*</code>, <code>!</code>, <code>@</code> and <code>^</code> has to be escaped by putting <code>^</code> in front of it.</p>
+<h2>Examples</h2>
+<pre><code class="language-javascript">{
+    &quot;info&quot;: { &quot;foo&quot;: &quot;fighter&quot;, &quot;crow&quot; : &quot;bar&quot; },
+    &quot;people&quot; : [
+        {
+            &quot;id&quot; : 1,
+            &quot;name&quot; : &quot;Joe&quot;,
+            &quot;pets&quot; : [
+                { &quot;race&quot; : &quot;Cat&quot;, &quot;name&quot; : &quot;Wendy&quot;, &quot;color&quot; : &quot;Black&quot; },
+                { &quot;race&quot; : &quot;Dog&quot;, &quot;name&quot; : &quot;Nana&quot;, &quot;color&quot; : &quot;Brown&quot; }
+            ]
+        },
+        { &quot;id&quot; : 2, &quot;name&quot; : &quot;Peter&quot; }
+    ],
+    &quot;attributes&quot; : {
+        &quot;goat&quot; : &quot;eat&quot;,
+        &quot;fish&quot; : &quot;swim&quot;,
+        &quot;-MUST_BE_ESCAPED-&quot; : &quot;nada&quot;
+    }
+}
+</code></pre>
+<p>Changing the <code>info</code> property (an object):</p>
+<pre><code class="language-javascript">{
+    &quot;*info&quot; : { &quot;foo&quot; : &quot;miauu&quot; }
+}
+</code></pre>
+<p>As changing members that are not arrays is the default operation, this also changes the <code>info</code> property:</p>
+<pre><code class="language-javascript">{
+    &quot;info&quot; : { &quot;foo&quot; : &quot;miauu&quot; }
+}
+</code></pre>
+<p>Replace the whole <code>info</code> property:</p>
+<pre><code class="language-javascript">{
+    &quot;!info&quot; : { &quot;foo&quot; : &quot;unknown&quot;, &quot;bar&quot; : &quot;hello&quot; }
+}
+</code></pre>
+<p>Removing the fish property from attributes:</p>
+<pre><code class="language-javascript">{
+    &quot;attributes&quot; : { &quot;-fish&quot; }
+}
+</code></pre>
+<p>Removing the fish property from attributes (property value is ignored):</p>
+<pre><code class="language-javascript">{
+    &quot;attributes&quot; : { &quot;-fish&quot; : {} }
+}
+</code></pre>
+<p>Replacing the strangely named &quot;-MUST_BE_ESCAPED-&quot; property from attributes requires escaping:</p>
+<pre><code class="language-javascript">{
+    &quot;attributes&quot; : { &quot;!^-MUST_BE_ESCAPED-&quot; : &quot;REPLACED!&quot; }
+}
+</code></pre>
+<p>Remove Joe from the <code>people</code> array:</p>
+<pre><code class="language-javascript">{
+    &quot;people&quot; : [{ &quot;-@id&quot; : 1 }]
+}
+</code></pre>
+<p>Change Peter in the <code>people</code> array:</p>
+<pre><code class="language-javascript">{
+    &quot;people&quot; : [{ &quot;*@id&quot; : 2, &quot;name&quot; : &quot;Peter Pan&quot; }]
+}
+</code></pre>
+<p>Another way to change Peter in the <code>people</code> array (before renaming him to &quot;Peter Pan&quot; as per the above example):</p>
+<pre><code class="language-javascript">{
+    &quot;people&quot; : [{ &quot;*@name&quot; : &quot;Peter&quot;, &quot;name&quot; : &quot;Peter Pan&quot; }]
+}
+</code></pre>
+<p>Add Nancy to the <code>people</code> array:</p>
+<pre><code class="language-javascript">{
+    &quot;people&quot; : [{ &quot;name&quot; : &quot;Nancy&quot; }]
+}
+</code></pre>
+<p>Replace the whole <code>people</code> property:</p>
+<pre><code class="language-javascript">{
+    &quot;!people&quot; : [{ &quot;name&quot; : &quot;Peter Pan&quot; }]
+}
+</code></pre>
+<p>Changing the color of the pet Wendy from black to red, adding the mouse Kipper and deleting Karl:</p>
+<pre><code class="language-javascript">{
+    &quot;*people&quot; : [
+        {
+            &quot;@id&quot; : 1,
+            &quot;pets&quot; : [
+                { &quot;race&quot; : &quot;Mouse&quot;, &quot;name&quot; : &quot;Kipper&quot;, &quot;color&quot; : &quot;Gray&quot; },
+                { &quot;*@name&quot; : &quot;Wendy&quot;, &quot;color&quot; : &quot;Red&quot; },
+                { &quot;-@name&quot; : &quot;Karl&quot; }
+            ]
+        }
+    ]
+}
+</code></pre>
+
+
+			      	</div>
+
+			      	<hr />
+
+			      	<nav>
+				        <span>
+				        	<strong>Previous: </strong><a href="rest/index.htm">Using exposed service</a>
+
+				        </span>
+				        <span class="pull-right">
+
+				        	
+
+				        </span>
+			      	</nav>
+
+		      </div><!--/right-->
+		  	</div><!--/row-->
+		</div><!--/container-->
+
+
+    </body>
+
+
+    <foot>
+        <script type='text/javascript' src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <script type='text/javascript' src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+
+        <script type="text/javascript" src="content/embed.js"></script>
+        <script type="text/javascript" src="content/prism.js"></script>
+        <script type="text/javascript" src="content/sidebar.js"></script>
+        <script type="text/javascript" src="content/affix.js"></script>
+
+<script>
+$('#search').keyup(function(e){
+  if(e.keyCode == 13) {
+    var search = $('#search').val();
+
+    var url = 'https://www.google.com/#q=site:pomona.io ' + search;
+    url = encodeURI(url);
+
+    //alert(url);
+
+    window.location.href = url;
+
+    e.stopPropagation();
+    if (e.cancelBubble!=null) e.cancelBubble = true;
+    return false;
+  }
+
+
+
+});
+
+</script>
+    </foot>
+</html>
