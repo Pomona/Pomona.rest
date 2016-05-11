@@ -109,6 +109,69 @@ property of your configuration class to be considered:</p>
 </code></pre>
 <h2>Type options</h2>
 <p>Type options are defined through the <code>ITypeMappingConfigurator&lt;T&gt;</code> interface.</p>
+<h3>Ignoring properties</h3>
+<p>A property can be ignored and hidden from the exposed resource by using the <code>Exclude</code> method.</p>
+<pre><code class="language-csharp">
+        public void ExcludeRule(ITypeMappingConfigurator&lt;Customer&gt; customer)
+        {
+            customer.Exclude(x =&gt; x.Password);
+        }
+</code></pre>
+<h3>Selecting handler</h3>
+<p>A handler class can be chosen for a resource type by using the <code>HandledBy&lt;T&gt;</code> method.</p>
+<pre><code class="language-csharp">
+        public void HandlerRule(ITypeMappingConfigurator&lt;Customer&gt; customer)
+        {
+            customer.HandledBy&lt;CustomerHandler&gt;();
+        }
+</code></pre>
+<p>You can find out more about this in <a href="../handlers/index.htm">Resource handlers</a></p>
+<h3>Treating type as a value object</h3>
+<p>We can treat a complex type as a value object, as opposed to a resource.
+A value object can be a part of resource or another value object, and has no URI.</p>
+<pre><code class="language-csharp">
+        public void ValueObjectRule(ITypeMappingConfigurator&lt;Customer&gt; customer)
+        {
+            customer.AsValueObject();
+        }
+</code></pre>
+<p>You can learn more about value types in <a href="../type_system.htm">Type system</a></p>
+<h3>Custom construction of object</h3>
+<p>When Pomona needs to instantiate a resource or value object type during deserialization,
+it uses the empty constructor by default if available.</p>
+<p>If we want to instantiate the object using a constructor or method taking parameters,
+we can use the <code>ConstructedUsing</code> method.</p>
+<pre><code class="language-csharp">
+        public void ConstructedUsingRule(ITypeMappingConfigurator&lt;Customer&gt; customer)
+        {
+            customer.ConstructedUsing(c =&gt; new Customer(c.Requires().Name, c.Optional().Password));
+        }
+</code></pre>
+<p>The <code>ConstructedUsing</code> method accepts an <code>Expression&lt;Func&lt;IConstructorControl&lt;TDeclaringType&gt;, TDeclaringType&gt;&gt;</code>
+argument.</p>
+<p>The <code>IConstructorControl&lt;T&gt;</code> parameter can then be used to bind properties with
+any corresponding parameters.</p>
+<h3>Constructor context</h3>
+<p>If we need to access some service while instantiating a type we can use the <code>Context&lt;T&gt;()</code>
+method of <code>IConstructorControl&lt;T&gt;</code>.</p>
+<pre><code class="language-csharp">
+        public void ContextfulConstructionRule(ITypeMappingConfigurator&lt;Customer&gt; customer)
+        {
+            customer.ConstructedUsing(
+                c =&gt; c.Context&lt;ICustomerFactory&gt;()
+                      .CreateCustomer(c.Requires().Name, c.Optional().Password));
+        }
+</code></pre>
+<h3>Specifying plural name of type</h3>
+<p>Pomona will try to derive the plural name of a type by using a few simple rules,
+which works for a majority of English words.</p>
+<p>This value is used to generate the URI for a root resource collection type.</p>
+<pre><code class="language-csharp">
+        public void PluralNameRule(ITypeMappingConfigurator&lt;Mouse&gt; mouse)
+        {
+            mouse.WithPluralName(&quot;Mice&quot;);
+        }
+</code></pre>
 <h2>Property options</h2>
 
 
