@@ -94,7 +94,7 @@ and signature.</p>
 <code>NancyContext</code>.</p>
 <h1>Types of handler methods</h1>
 <h2>Query handlers</h2>
-<p>The Query handlers are used for GET requests to resource collections. They are required
+<p>The Query handlers are used for <code>GET</code> requests to resource collections. They are required
 to return an <code>IQueryable&lt;T&gt;</code>.</p>
 <p>They must follow the naming pattern <code>Get{Resources}</code> or <code>Query{Resources}</code>, where
 <code>{Resources}</code> must be the plural name of the resource type. Or, if the handler class
@@ -114,11 +114,11 @@ is only used for one type, it can simply be called <code>Query</code>.</p>
         }
     }
 </code></pre>
-<p>Here a GET request to /game-consoles would be routed to the <code>Query()</code> method of the
+<p>Here a <code>GET</code> request to /game-consoles would be routed to the <code>Query()</code> method of the
 handler type.</p>
 <h2>Get single resource by id</h2>
 <p>A method named <code>Get{Resource}</code> or <code>Get</code> that takes the id as its first argument and
-returns a resource of the correct type will handle requests for resources by id.</p>
+returns a resource of the correct type will handle <code>GET</code> requests for resources by id.</p>
 <p>Note that by default this method is implemented by using the query handler,
 so in many cases manually implementing this method is redundant.</p>
 <pre><code class="language-csharp">
@@ -127,6 +127,28 @@ so in many cases manually implementing this method is redundant.</p>
             return this.customerRepo.GetById(id);
         }
 </code></pre>
+<h2>Post resource</h2>
+<p>A method named <code>Post</code> or <code>Post{Resource}</code> taking the deserialized resource as a
+parameter will be used for handling <code>POST</code> requests .</p>
+<pre><code class="language-csharp">
+        public Customer Post(Customer customer)
+        {
+            this.customerRepo.Save(customer);
+            return customer;
+        }
+</code></pre>
+<h2>Patch resource</h2>
+<p>A method named <code>Patch</code> or <code>Patch{Resource}</code> receives the fully patched resource
+on a <code>PATCH</code>.</p>
+<pre><code class="language-csharp">
+        public Customer Patch(Customer customer)
+        {
+            this.customerRepo.Save(customer);
+            return customer;
+        }
+</code></pre>
+<p>Pomona uses a custom JSON patch format, more details can be found in
+<a href="../json_patch_format.htm">JSON PATCH Specification</a></p>
 
 
 			      	</div>

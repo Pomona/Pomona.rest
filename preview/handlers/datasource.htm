@@ -83,7 +83,46 @@
 			      	<div id="main-pane">
 			      		<!--Title:Data source-->
 <!--Url:datasource-->
-<p>TODO(Write some content!)</p>
+<p>As an alternative to creating handlers for each specific resource type it is also
+possible to implement an <code>IPomonaDataSource</code>.</p>
+<p>A data source will be used when registered for in the IoC container.</p>
+<p><code>IPomonaDataSource</code> has the methods <code>Patch&lt;T&gt;</code>, <code>Post&lt;T&gt;</code> and <code>Query&lt;T&gt;</code>, where <code>T</code> is the
+resource type for the current request.</p>
+<p><em>Note that the <code>IPomonaDataSource</code> interface is planned to be obsoleted in the next major release of Pomona</em></p>
+<pre><code class="language-csharp">
+    internal class SimpleDataSource : IPomonaDataSource
+    {
+        private static readonly IList&lt;SimpleExtraData&gt; repository = new List&lt;SimpleExtraData&gt;()
+        {
+            new SimpleExtraData { Id = 0, TheString = &quot;What&quot; },
+            new SimpleExtraData { Id = 1, TheString = &quot;The&quot; },
+            new SimpleExtraData { Id = 2, TheString = &quot;BLEEP&quot; }
+        };
+
+
+        public object Patch&lt;T&gt;(T updatedObject) where T : class
+        {
+            var simpleData = updatedObject as SimpleExtraData;
+            repository[simpleData.Id] = simpleData;
+            return simpleData;
+        }
+
+
+        public object Post&lt;T&gt;(T newObject) where T : class
+        {
+            var simpleData = newObject as SimpleExtraData;
+            simpleData.Id = repository.Count;
+            repository.Add(simpleData);
+            return simpleData;
+        }
+
+
+        public IQueryable&lt;T&gt; Query&lt;T&gt;() where T : class
+        {
+            return repository.Cast&lt;T&gt;().AsQueryable();
+        }
+    }
+</code></pre>
 
 
 			      	</div>
