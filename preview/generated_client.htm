@@ -83,7 +83,89 @@
 			      	<div id="main-pane">
 			      		<!--Title:Generated client-->
 <!--Url:generated_client-->
-<p>TODO(Write some content!)</p>
+<p>Pomona can generate a .NET compatible client for our service if desired.</p>
+<p>A client NuGet package can be generated and downloaded by accessing the
+<code>/client.nupkg</code> url on the service.</p>
+<p>Alternatively the DLL can be downloaded directly from <code>/{ClientAssembly}.dll</code>,
+where <code>{ClientAssembly}</code> must be replaced with the configured name of the
+client dll (see below for this).</p>
+<h2>Controlling client generation</h2>
+<h3>Metadata</h3>
+<p>By overriding the <code>ClientMetadata</code> property of a <code>ITypeMappingFilter</code>,
+we can change the assembly name, interface name, type name and namespace
+of the client.</p>
+<pre><code class="language-csharp">
+        public override ClientMetadata ClientMetadata =&gt;
+            base.ClientMetadata.With(
+                assemblyName : &quot;Critters.Client&quot;,
+                name : &quot;CritterClient&quot;,
+                interfaceName : &quot;ICritterClient&quot;,
+                @namespace : &quot;Critters.Client&quot;);
+</code></pre>
+<h3>Merged assembly</h3>
+<p>By returning <code>true</code> from the <code>GenerateIndependentClient()</code> method of
+<code>ITypeMappingFilter</code> we can generate an assembly with <code>Pomona.Common.dll</code>
+merged.</p>
+<p>Note that the resulting assembly will still have a dependency on
+<code>Newtonsoft.Json</code>.</p>
+<h2>LINQ support</h2>
+<p>As the <code>IQueryable</code> interface by nature is a leaky abstraction, supporting
+all queries is not practical.</p>
+<p>Common use cases should however be supported, although sometimes with a
+bit of <code>Expression</code> acrobatics.</p>
+<h3>Simple queries</h3>
+<p>Simple non-aggregate queries must be structured in a way described in
+the example below:</p>
+<pre><code class="language-csharp">
+client.Weapons
+      .Query()
+      .Where(x =&gt; x.Price &gt; 100.0m /* any number of where expressions */)
+      .Select(x =&gt; x.Model /* any number of select expressions */)
+      .Where(x =&gt; x.Name.StartsWith(&quot;NERF&quot;) /* where and select expressions can be mixed */)
+      .OrderBy(x =&gt; x.Name /* ordering must come after where and select */)
+      .Skip(50 /* skip after order by */)
+      .Take(50 /* take after skip */)
+      .ToList();
+</code></pre>
+<h3>Group by queries</h3>
+<p>Aggregate queries must be structured be structured in a way described in
+the example below:</p>
+<pre><code class="language-csharp">
+client.Weapons
+        .Query()
+        .Where(x =&gt; x.Price &gt; 100.0m /* any number of where expressions */)
+        .GroupBy(x =&gt; x.Model.Name /* group by after where */)
+        .Select(x =&gt; new { modelName = x.Key, totalPrice = x.Sum(y =&gt; y.Price) })
+        .OrderBy(x =&gt; x.totalPrice)
+        .ToList();
+</code></pre>
+<h3>Supported expressions</h3>
+<p>A few of the supported methods are listed here</p>
+<ul>
+<li>Operators: + - / * &amp;&amp; ||</li>
+<li>String
+<ul>
+<li>.Length</li>
+<li>.StartsWith(string value)</li>
+<li>.Contains(string value)</li>
+<li>.ToLower()</li>
+<li>.ToUpper()</li>
+</ul>
+</li>
+<li>IEnumerable&lt;T&gt;
+<ul>
+<li>.Where(Func&lt;,&gt; predicate)</li>
+<li>.Select(Func&lt;,&gt; selector)</li>
+<li>.Sum()</li>
+<li>.Count()</li>
+</ul>
+</li>
+</ul>
+<p>A more complete list can be found in <code>QueryFunctionMapping.cs</code> of the Pomona
+source code.</p>
+<h2>Build setup</h2>
+<p>There are times we want to use a client generated from one project in another
+project of the same solution.</p>
 
 
 			      	</div>

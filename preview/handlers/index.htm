@@ -100,20 +100,19 @@ to return an <code>IQueryable&lt;T&gt;</code>.</p>
 <code>{Resources}</code> must be the plural name of the resource type. Or, if the handler class
 is only used for one type, it can simply be called <code>Query</code>.</p>
 <pre><code class="language-csharp">
-    public class DustyConfiguration : PomonaConfigurationBase
+    public class GameConsoleHandler
     {
-        public override IEnumerable&lt;object&gt; FluentRuleObjects =&gt; new object[] { new DustyRules() };
-        public override IEnumerable&lt;Type&gt; SourceTypes =&gt; new[] { typeof(GameConsole) };
-
-        public class DustyRules
+        public IQueryable&lt;GameConsole&gt; Query()
         {
-            public void Map(ITypeMappingConfigurator&lt;GameConsole&gt; gameConsole)
-            {
-                gameConsole.HandledBy&lt;GameConsoleHandler&gt;();
-            }
+            return
+                new[]
+                {
+                    new GameConsole() { Id = &quot;a2600&quot;, Name = &quot;Atari 2600&quot; },
+                    new GameConsole() { Id = &quot;gameboy&quot;, Name = &quot;Game Boy&quot; },
+                    new GameConsole() { Id = &quot;nes&quot;, Name = &quot;Nintendo Entertainment System&quot; },
+                }.AsQueryable();
         }
     }
-
 </code></pre>
 <p>Here a <code>GET</code> request to /game-consoles would be routed to the <code>Query()</code> method of the
 handler type.</p>
@@ -150,6 +149,15 @@ on a <code>PATCH</code>.</p>
 </code></pre>
 <p>Pomona uses a custom JSON patch format, more details can be found in
 <a href="../json_patch_format.htm">JSON PATCH Specification</a></p>
+<h2>Delete resource</h2>
+<p>A method named <code>Delete</code> or <code>Delete{Resource}</code> that either takes a resource
+or id parameter will be used for <code>DELETE</code> requests.</p>
+<pre><code class="language-csharp">
+        public void Delete(Customer customer)
+        {
+            this.customerRepo.Delete(customer);
+        }
+</code></pre>
 
 
 			      	</div>

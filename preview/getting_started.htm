@@ -113,17 +113,6 @@ service.</p>
     }
 </code></pre>
 <p>..and also a corresponding configuration class.</p>
-<p class="bg-warning" style="padding:10px"><b>Missing code sample &#39;dusty-configuration&#39;</b><small> -- Wait for ST to catch up reading samples or CTRL+SHIFT+R to force refresh</small></p>
-<p>The configuration above have two properties overridden.</p>
-<ul>
-<li><code>FluentRuleObjects</code> returns a list containing one rule object <code>DustyRules</code>,
-which will be scanned for mapping rules.</li>
-<li><code>SourceTypes</code> returns a list of the domain objects to be mapped.</li>
-</ul>
-<h3>Handling resource requests</h3>
-<p>In the <code>Map</code> method of the <code>DustyRules</code> we defined that <code>GameConsoleHandler</code> will
-handle requests for the <code>GameConsole</code> resource.</p>
-<p>Now we need to actually implement this handler class:</p>
 <pre><code class="language-csharp">
     public class DustyConfiguration : PomonaConfigurationBase
     {
@@ -139,6 +128,31 @@ handle requests for the <code>GameConsole</code> resource.</p>
         }
     }
 
+</code></pre>
+<p>The configuration above have two properties overridden.</p>
+<ul>
+<li><code>FluentRuleObjects</code> returns a list containing one rule object <code>DustyRules</code>,
+which will be scanned for mapping rules.</li>
+<li><code>SourceTypes</code> returns a list of the domain objects to be mapped.</li>
+</ul>
+<h3>Handling resource requests</h3>
+<p>In the <code>Map</code> method of the <code>DustyRules</code> we defined that <code>GameConsoleHandler</code> will
+handle requests for the <code>GameConsole</code> resource.</p>
+<p>Now we need to actually implement this handler class:</p>
+<pre><code class="language-csharp">
+    public class GameConsoleHandler
+    {
+        public IQueryable&lt;GameConsole&gt; Query()
+        {
+            return
+                new[]
+                {
+                    new GameConsole() { Id = &quot;a2600&quot;, Name = &quot;Atari 2600&quot; },
+                    new GameConsole() { Id = &quot;gameboy&quot;, Name = &quot;Game Boy&quot; },
+                    new GameConsole() { Id = &quot;nes&quot;, Name = &quot;Nintendo Entertainment System&quot; },
+                }.AsQueryable();
+        }
+    }
 </code></pre>
 <p>For exposing a read-only collection of resources we just need to define one method
 returning an <code>IQueryable&lt;GameConsole&gt;</code>.</p>
