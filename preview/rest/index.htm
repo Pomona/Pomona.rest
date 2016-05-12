@@ -83,7 +83,16 @@
 			      	<div id="main-pane">
 			      		<!--Title:Using exposed service-->
 <!--Url:rest-->
-<p>TODO(Write some content!)</p>
+<p>Pomona exposes your web service using a JSON format.</p>
+<h1>Links</h1>
+<p>Links to other resources are wrapped inside a JSON object,
+which makes it possibly to distinguish them from other JSON strings.</p>
+<p>They can also contain a type hint for the referenced resource.</p>
+<pre><code class="language-javascript">{
+  &quot;_type&quot;: &quot;User&quot;,
+  &quot;_ref&quot;: &quot;http://some-service/users/123&quot;
+}
+</code></pre>
 
 
 			      	</div>

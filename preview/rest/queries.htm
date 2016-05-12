@@ -37,7 +37,7 @@
 <a href="https://gitter.im/Pomona/Pomona?utm_source=badge&amp;utm_medium=badge&amp;utm_campaign=pr-badge&amp;utm_content=badge"><img src="https://camo.githubusercontent.com/da2edb525cde1455a622c58c0effc3a90b9a181c/68747470733a2f2f6261646765732e6769747465722e696d2f4a6f696e253230436861742e737667" alt="Join the chat at https://gitter.im/Pomona/Pomona" data-canonical-src="https://badges.gitter.im/Join%20Chat.svg" style="max-width:100%;"></a>
 		        </li>
 		      	<li><a href="../rest/index.htm" title="Using exposed service">Previous</a></li>
-		      	<li><a href="../rest/patch_format.htm" title="Patch format">Next</a></li>
+		      	<li><a href="../rest/etags.htm" title="Concurrency control using ETags">Next</a></li>
 		      </ul>
       <div class="navbar-form navbar-left" role="search">
         <div class="form-group">
@@ -68,7 +68,7 @@
 				<ul class="nav nav-stacked affix" id="sidebar">
 
 		        </ul>
-		        	<h3 class="no-margin">Next</h3><p><a href="../rest/patch_format.htm">Patch format</a></p>
+		        	<h3 class="no-margin">Next</h3><p><a href="../rest/etags.htm">Concurrency control using ETags</a></p>
 		        	<h3 class="no-margin">Previous</h3><a href="../rest/index.htm">Using exposed service</a></p>
 
 		        </ul>
@@ -83,7 +83,42 @@
 			      	<div id="main-pane">
 			      		<!--Title:Queries-->
 <!--Url:queries-->
-<p>TODO(Write some content!)</p>
+<p>Resource collections exposed from an <code>IQueryable&lt;T&gt;</code> source can be queried
+using the a standard set of query parameters.</p>
+<h2>Query parameters</h2>
+<ul>
+<li><code>$filter</code>: predicate expression</li>
+<li><code>$groupby</code>: group by expression</li>
+<li><code>$select</code>: selector expression</li>
+</ul>
+<h2>Operators</h2>
+<h3>Boolean</h3>
+<ul>
+<li><code>and</code>, <code>&amp;&amp;</code>: And (conditional)</li>
+<li><code>or</code>, <code>||</code>: Or (conditional)</li>
+</ul>
+<h3>Multiplicative</h3>
+<ul>
+<li><code>mul</code>, <code>*</code>: Multiply</li>
+<li><code>div</code>, <code>/</code>: Divide</li>
+<li><code>mod</code>, <code>%</code>: Modulus</li>
+</ul>
+<h3>Additive</h3>
+<ul>
+<li><code>add</code>, <code>+</code>: Add</li>
+<li><code>sub</code>, <code>-</code>: Subtract</li>
+</ul>
+<h3>Relational</h3>
+<ul>
+<li><code>eq</code>, <code>==</code>: Equals</li>
+<li><code>ne</code>, <code>!=</code>: Not equals</li>
+<li><code>gt</code>, <code>&gt;</code>: Greater than</li>
+<li><code>lt</code>, <code>&lt;</code>: Less than</li>
+<li><code>ge</code>, <code>&gt;=</code>: Greater than or equal</li>
+<li><code>le</code>, <code>&lt;=</code>: Less than or equal</li>
+</ul>
+<h2>Grammar</h2>
+<p>For the complete grammar look at the ANTLR3 grammar file <code>PomonaQuery.q</code>.</p>
 
 
 			      	</div>
@@ -97,7 +132,7 @@
 				        </span>
 				        <span class="pull-right">
 
-				        	<strong>Next: </strong><a href="../rest/patch_format.htm">Patch format</a>
+				        	<strong>Next: </strong><a href="../rest/etags.htm">Concurrency control using ETags</a>
 
 				        </span>
 			      	</nav>
