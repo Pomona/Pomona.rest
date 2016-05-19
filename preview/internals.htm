@@ -5,7 +5,7 @@
         <meta charset="utf-8">
         <meta name="generator" content="Bootply" />
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-		<title>Pomona - Index</title>
+		<title>Pomona - Contributors guide</title>
 		<link href="content/bootstrap.min.css" rel="stylesheet" type="text/css" />
 		<link href="content/prism.css" rel="stylesheet" type="text/css" />
 		<link href="content/theme.css" rel="stylesheet" type="text/css" />
@@ -36,8 +36,8 @@
 		        <li>
 <a href="https://gitter.im/Pomona/Pomona?utm_source=badge&amp;utm_medium=badge&amp;utm_campaign=pr-badge&amp;utm_content=badge"><img src="https://camo.githubusercontent.com/da2edb525cde1455a622c58c0effc3a90b9a181c/68747470733a2f2f6261646765732e6769747465722e696d2f4a6f696e253230436861742e737667" alt="Join the chat at https://gitter.im/Pomona/Pomona" data-canonical-src="https://badges.gitter.im/Join%20Chat.svg" style="max-width:100%;"></a>
 		        </li>
+		      	<li><a href="json_patch_format.htm" title="JSON PATCH Specification">Previous</a></li>
 		      	
-		      	<li><a href="getting_started.htm" title="Getting started">Next</a></li>
 		      </ul>
       <div class="navbar-form navbar-left" role="search">
         <div class="form-group">
@@ -52,7 +52,7 @@
 
 		  <div class="container">
 		  	<nav class="navbar-inverse">
-		  		<ol class="breadcrumb"><li class="active">Index</li></ol>
+		  		<ol class="breadcrumb"><li><a href="index.htm">Index</a></li><li class="active">Contributors guide</li></ol>
 		  	</nav>
 		  </div>
 
@@ -68,27 +68,62 @@
 				<ul class="nav nav-stacked affix" id="sidebar">
 
 		        </ul>
-		        	<h3 class="no-margin">Next</h3><p><a href="getting_started.htm">Getting started</a></p>
 		        	
+		        	<h3 class="no-margin">Previous</h3><a href="json_patch_format.htm">JSON PATCH Specification</a></p>
 
 		        </ul>
 		      </div><!--/left-->
 
 		      <!--right-->
 		      <div class="col-md-9">
-			      	<h1>Index <a href="https://github.com/Pomona/Pomona/blob/develop/documentation/index.md"  class="text-muted small pull-right fa fa-github" style="margin-top: 10px"> Edit on GitHub</a></h1>
+			      	<h1>Contributors guide <a href="https://github.com/Pomona/Pomona/blob/develop/documentation/internals.md"  class="text-muted small pull-right fa fa-github" style="margin-top: 10px"> Edit on GitHub</a></h1>
 
 			      	<hr />
 
 			      	<div id="main-pane">
-			      		<h1>Introduction</h1>
-<p>Pomona is a framework built for exposing a domain model in a RESTful and hypermedia-driven manner.</p>
-<p>It embraces the concept of convention over configuration, and provides opinioned defaults on how
-domain model objects is exposed as HTTP resources.</p>
-<p>Pomona was born out of frustrations with the difficulties of exposing a complex business domain model
-as a RESTful web service.</p>
-<h2>Chapters</h2>
-<ul class="table-of-contents"><li><a href="getting_started.htm">Getting started</a></li><li><a href="configuration/index.htm">Configuration and bootstrapping</a><ul><li><a href="configuration/rules.htm">Fluent rules</a></li><li><a href="configuration/convention.htm">Changing conventions</a></li></ul></li><li><a href="handlers/index.htm">Resource handlers</a><ul><li><a href="handlers/datasource.htm">Data source</a></li></ul></li><li><a href="type_system.htm">Type system</a></li><li><a href="generated_client.htm">Generated client</a></li><li><a href="rest/index.htm">Using exposed service</a><ul><li><a href="rest/queries.htm">Queries</a></li><li><a href="rest/etags.htm">Concurrency control using ETags</a></li></ul></li><li><a href="json_patch_format.htm">JSON PATCH Specification</a></li><li><a href="internals.htm">Contributors guide</a></li></ul>
+			      		<!--Title:Contributors guide-->
+<!--Url:internals-->
+<h1>Building Pomona</h1>
+<p>You can build Pomona using Visual Studio 2015 or Mono (4.2.3+).</p>
+<p>Only standard .NET 4.5.1 assemblies need to be installed, all other
+assemblies is included in the repository or will be restored by nuget.</p>
+<h1>Design</h1>
+<p>Pomona was built from the bottom up. If some architectural decisions
+might seem arbitrary, it's probably because they are.</p>
+<h2>Architecture</h2>
+<h5><strong>Pomona architecture diagram</strong></h5><img src="content/diagrams/pomona_architecture.png" style="max-width:100%" />
+<h2>Request lifecycle</h2>
+<h5><strong>Code path of request</strong></h5><img src="content/diagrams/request_code_path.png" style="max-width:100%" />
+<h2>Routing</h2>
+<p>During early stages of Pomona development the intention was to let Nancy
+handle the routing. Unfortunately we ran into some corner cases related to
+child resource sets which was hard to fix.</p>
+<p>As a result Pomona now has its own routing logic, inside the <code>Pomona.Routing</code>
+namespace. The routes are organized as a tree with the <code>Route</code> class as the
+base node type.</p>
+<h3>Route node types</h3>
+<ul>
+<li><code>DataSourceRootRoute</code> - Default root <code>/</code> route, listing all root resources</li>
+<li><code>DataSourceCollectionRoute</code> - Route to collection of a root resource type, like <code>/customers</code></li>
+<li><code>GetByIdRoute</code> - Route to an identified item in a collection, like <code>/customers/{id}</code></li>
+<li><code>ResourcePropertyRoute</code> - Route to a child resource collection bound to a property
+of another resource, like <code>/customers/{id}/contacts</code></li>
+</ul>
+<h2>Queries</h2>
+<h3>Expression parsing</h3>
+<p><code>QueryExpressionParser</code> will orchestrate the conversion of an expression as
+a string to a LINQ expression tree in the following way:</p>
+<p>The lexing and parsing of an expression is performed using an ANTLR 3
+compatible grammar named <code>PomonaQueryParser</code>. This grammar will create an initial
+<a href="https://en.wikipedia.org/wiki/Abstract_syntax_tree">abstract syntax tree</a> .</p>
+<p>The tree will then be transformed in <code>PomonaQueryTreeParser</code> to an intermediate form,
+with more semantic information and error checking.</p>
+<p>Finally <code>NodeTreeToExpressionConverter</code> will convert the intermediate tree to a LINQ
+<code>Expression</code>.</p>
+<h1>Ideas for future changes</h1>
+<h2>Root resource</h2>
+<p>For a long time the plan has been to abandon the <code>IPomonaDataSource</code> interface, and
+instead rely on having a root resource with navigation properties to all root resources.</p>
 
 
 			      	</div>
@@ -97,12 +132,12 @@ as a RESTful web service.</p>
 
 			      	<nav>
 				        <span>
-				        	
+				        	<strong>Previous: </strong><a href="json_patch_format.htm">JSON PATCH Specification</a>
 
 				        </span>
 				        <span class="pull-right">
 
-				        	<strong>Next: </strong><a href="getting_started.htm">Getting started</a>
+				        	
 
 				        </span>
 			      	</nav>

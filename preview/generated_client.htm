@@ -128,7 +128,7 @@ client.Weapons
       .ToList();
 </code></pre>
 <h3>Group by queries</h3>
-<p>Aggregate queries must be structured be structured in a way described in
+<p>Aggregate queries must be structured in a way described in
 the example below:</p>
 <pre><code class="language-csharp">
 client.Weapons
@@ -183,7 +183,7 @@ with primitive values will automatically project to <code>Map</code>.</p>
             string OtherCustom { get; set; }
         }
 </code></pre>
-<p>After this we can query the resource using the <code>IExtendedResource3</code> interface,
+<p>After this we can query the resource using the <code>IExtendedResource</code> interface,
 which will automatically redirect <code>CustomString</code> to <code>Map[&quot;CustomString&quot;]</code>,
 and <code>OtherCustom</code> to <code>Map[&quot;OtherCustom&quot;]</code>.</p>
 <p>For more details about this feature looking at the <code>ExtendedResourceClientTests.cs</code>

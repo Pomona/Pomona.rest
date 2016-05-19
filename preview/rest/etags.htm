@@ -83,7 +83,22 @@
 			      	<div id="main-pane">
 			      		<!--Title:Concurrency control using ETags-->
 <!--Url:etags-->
-<p>TODO(Write some content!)</p>
+<p>Pomona supports optimistic concurrency control by using a combination of
+<a href="https://en.wikipedia.org/wiki/HTTP_ETag">ETags</a> and the <code>If-Match</code> header.</p>
+<p>For this to work we need to specify what property to use as the ETag.</p>
+<pre><code class="language-csharp">
+        public void Map(ITypeMappingConfigurator&lt;EtaggedEntity&gt; map)
+        {
+            map.Include(x =&gt; x.ETag, o =&gt; o.AsEtag());
+        }
+</code></pre>
+<p>Every time a <code>PATCH</code> request is made to this resource with the <code>If-Match</code>
+header set to the previously seen <code>ETag</code> header it will compare the header value
+with the current ETag value. If the ETag has changed Pomona will abort the
+request with a <code>412</code> <a href="https://tools.ietf.org/html/rfc7232#section-4.2">Precondition Failed</a>
+status code.</p>
+<p>When using a data layer with <a href="https://en.wikipedia.org/wiki/Optimistic_concurrency_control">optimistic concurrency</a>
+control we should also throw a <code>ResourcePreconditionFailedException</code> if a conflict is detected during update.</p>
 
 
 			      	</div>
