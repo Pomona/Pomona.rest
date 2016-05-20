@@ -116,11 +116,29 @@ bit of <code>Expression</code> acrobatics.</p>
 <h3>Simple queries</h3>
 <p>Simple non-aggregate queries must be structured in a way described in
 the example below:</p>
-<p class="bg-warning" style="padding:10px"><b>Missing code sample &#39;client-linq-simple-query-structure&#39;</b><small> -- Wait for ST to catch up reading samples or CTRL+SHIFT+R to force refresh</small></p>
+<pre><code class="language-csharp">
+client.Weapons
+      .Query()
+      .Where(x =&gt; x.Price &gt; 100.0m /* any number of where expressions */)
+      .Select(x =&gt; x.Model /* any number of select expressions */)
+      .Where(x =&gt; x.Name.StartsWith(&quot;NERF&quot;) /* where and select expressions can be mixed */)
+      .OrderBy(x =&gt; x.Name /* ordering must come after where and select */)
+      .Skip(50 /* skip after order by */)
+      .Take(50 /* take after skip */)
+      .ToList();
+</code></pre>
 <h3>Group by queries</h3>
 <p>Aggregate queries must be structured in a way described in
 the example below:</p>
-<p class="bg-warning" style="padding:10px"><b>Missing code sample &#39;client-linq-aggregate-query-structure&#39;</b><small> -- Wait for ST to catch up reading samples or CTRL+SHIFT+R to force refresh</small></p>
+<pre><code class="language-csharp">
+client.Weapons
+        .Query()
+        .Where(x =&gt; x.Price &gt; 100.0m /* any number of where expressions */)
+        .GroupBy(x =&gt; x.Model.Name /* group by after where */)
+        .Select(x =&gt; new { modelName = x.Key, totalPrice = x.Sum(y =&gt; y.Price) })
+        .OrderBy(x =&gt; x.totalPrice)
+        .ToList();
+</code></pre>
 <h3>Supported expressions</h3>
 <p>A few of the supported methods are listed here</p>
 <ul>

@@ -105,7 +105,12 @@ service.</p>
 <p><em>Every resource must have an id, which will be used as part of the URL.</em></p>
 <h3>Setting up a module</h3>
 <p>Then we need to create a module,</p>
-<p class="bg-warning" style="padding:10px"><b>Missing code sample &#39;dusty-module&#39;</b><small> -- Wait for ST to catch up reading samples or CTRL+SHIFT+R to force refresh</small></p>
+<pre><code class="language-csharp">
+    [PomonaConfiguration(typeof(DustyConfiguration))]
+    public class DustyModule : PomonaModule
+    {
+    }
+</code></pre>
 <p>..and also a corresponding configuration class.</p>
 <pre><code class="language-csharp">
     public class DustyConfiguration : PomonaConfigurationBase
