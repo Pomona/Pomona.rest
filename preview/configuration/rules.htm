@@ -98,6 +98,9 @@ any class.</p>
 </code></pre>
 <p>Any object containing fluent rules must be returned from the <code>FluentRuleObjects</code>
 property of your configuration class to be considered:</p>
+<p>Pomona will scan fluent rule objects and look for methods taking one argument
+of type <code>ITypeMappingConfigurator&lt;T&gt;</code>. A rule methods will be applied to <code>T</code>
+and all subtypes of <code>T</code>.</p>
 <pre><code class="language-csharp">
     public class Configuration : PomonaConfigurationBase
     {
