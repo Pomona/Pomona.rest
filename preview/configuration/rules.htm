@@ -112,6 +112,8 @@ and all subtypes of <code>T</code>.</p>
 </code></pre>
 <h1>Type options</h1>
 <p>Type options are defined through the <code>ITypeMappingConfigurator&lt;T&gt;</code> interface.</p>
+<p>Rules specified using <code>ITypeMappingConfigurator&lt;T&gt;</code> can either be chained, or split
+up in multiple declarations.</p>
 <h2>Ignoring properties</h2>
 <p>A property can be ignored and hidden from the exposed resource by using the <code>Exclude</code> method.</p>
 <pre><code class="language-csharp">
