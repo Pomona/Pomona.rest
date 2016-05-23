@@ -84,14 +84,17 @@
 			      		<!--Title:Resource handlers-->
 <!--Url:handlers-->
 <h1>What's a handler?</h1>
-<p>In Pomona a handler is something that handles a HTTP request. It's basically
-the same as what is called a &quot;controller&quot; in many other web frameworks.</p>
-<p>We can define one or more handler types per resource type, either by using the
-<code>HandledBy&lt;T&gt;(..)</code> method or by overriding the <code>GetResourceHandlers</code> convention.</p>
+<p>In Pomona a handler class is where an application defines how a HTTP request
+will be handled. This is what would be called a &quot;controller&quot; in many other web frameworks.</p>
+<p>We'll typically define one handler class per resource type. This can be done by either
+using the <code>HandledBy&lt;T&gt;(..)</code> method of the fluent configuration API, or by overriding
+the <code>GetResourceHandlers</code> convention.</p>
 <p>Methods in the handler class are duck-typed, and resolved using their name
 and signature.</p>
 <p>A handler is instantiated using the IoC container associated with the processed
 <code>NancyContext</code>.</p>
+<p>When desired, multiple handler classes for can be defined for a resource type. For example
+one class per HTTP action.</p>
 <h1>Types of handler methods</h1>
 <h2>Query handlers</h2>
 <p>The Query handlers are used for <code>GET</code> requests to resource collections. They are required

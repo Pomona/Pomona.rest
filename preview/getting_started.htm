@@ -104,14 +104,14 @@ service.</p>
 </code></pre>
 <p><em>Every resource must have an id, which will be used as part of the URL.</em></p>
 <h3>Setting up a module</h3>
-<p>Then we need to create a module,</p>
+<p>Then we need to create a module, which represents the endpoint of our service.</p>
 <pre><code class="language-csharp">
     [PomonaConfiguration(typeof(DustyConfiguration))]
     public class DustyModule : PomonaModule
     {
     }
 </code></pre>
-<p>..and also a corresponding configuration class.</p>
+<p>Additionally we need a corresponding configuration class.</p>
 <pre><code class="language-csharp">
     public class DustyConfiguration : PomonaConfigurationBase
     {
@@ -137,7 +137,8 @@ which will be scanned for mapping rules.</li>
 <h3>Handling resource requests</h3>
 <p>In the <code>Map</code> method of the <code>DustyRules</code> we defined that <code>GameConsoleHandler</code> will
 handle requests for the <code>GameConsole</code> resource.</p>
-<p>Now we need to actually implement this handler class:</p>
+<p>This is a handler class, which will handle HTTP actions for one or more resources.
+We can now implement <code>GameConsoleHandler</code>, like this:</p>
 <pre><code class="language-csharp">
     public class GameConsoleHandler
     {
