@@ -142,7 +142,7 @@ A value object can be a part of resource or another value object, and has no URI
 <h2>Custom construction of object</h2>
 <p>When Pomona needs to instantiate a resource or value object type during deserialization,
 it uses the empty constructor by default if available.</p>
-<p>If we want to instantiate the object using a constructor or method taking parameters,
+<p>If we want to instantiate the object using a non-empty constructor or a method taking parameters,
 we can use the <code>ConstructedUsing</code> method.</p>
 <pre><code class="language-csharp">
         public void ConstructedUsingRule(ITypeMappingConfigurator&lt;Customer&gt; customer)
