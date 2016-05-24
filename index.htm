@@ -5,7 +5,7 @@
         <meta charset="utf-8">
         <meta name="generator" content="Bootply" />
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-		<title>Pomona - Index</title>
+		<title>Pomona - Pomona</title>
 		<link href="content/bootstrap.min.css" rel="stylesheet" type="text/css" />
 		<link href="content/prism.css" rel="stylesheet" type="text/css" />
 		<link href="content/theme.css" rel="stylesheet" type="text/css" />
@@ -33,6 +33,12 @@
 		    </div>
 		    <nav class="collapse navbar-collapse" role="navigation">
 		      <ul class="nav navbar-nav pull-right">
+            <li>
+              <a href="https://ci.appveyor.com/project/Pomona/pomona/branch/master"><img src="https://camo.githubusercontent.com/292475f55ea801049dca2b513810703735ccebce/68747470733a2f2f63692e6170707665796f722e636f6d2f6170692f70726f6a656374732f7374617475732f766a33637734396e34393975363034362f6272616e63682f6d61737465723f7376673d74727565" alt="Build Status" data-canonical-src="https://ci.appveyor.com/api/projects/status/vj3cw49n499u6046/branch/master?svg=true" style="max-width:100%;"></a>
+            </li>
+            <li>
+              <a href="https://travis-ci.org/Pomona/Pomona"><img src="https://camo.githubusercontent.com/b95255081c0290893d299b926d4bd29dca156ffd/68747470733a2f2f7472617669732d63692e6f72672f506f6d6f6e612f506f6d6f6e612e7376673f6272616e63683d6d6173746572" alt="Build Status" data-canonical-src="https://travis-ci.org/Pomona/Pomona.svg?branch=master" style="max-width:100%;"></a>
+            </li>
 		        <li>
 <a href="https://gitter.im/Pomona/Pomona?utm_source=badge&amp;utm_medium=badge&amp;utm_campaign=pr-badge&amp;utm_content=badge"><img src="https://camo.githubusercontent.com/da2edb525cde1455a622c58c0effc3a90b9a181c/68747470733a2f2f6261646765732e6769747465722e696d2f4a6f696e253230436861742e737667" alt="Join the chat at https://gitter.im/Pomona/Pomona" data-canonical-src="https://badges.gitter.im/Join%20Chat.svg" style="max-width:100%;"></a>
 		        </li>
@@ -51,8 +57,8 @@
 		</nav>
 
 		  <div class="container">
-		  	<nav class="navbar-inverse">
-		  		<ol class="breadcrumb"><li class="active">Index</li></ol>
+		  	<nav class="navbar">
+		  		<ol class="breadcrumb"><li class="active">Pomona</li></ol>
 		  	</nav>
 		  </div>
 
@@ -62,26 +68,24 @@
 		      <!--left-->
 
 		      <div class="col-md-3" id="leftCol">
-		      	<h3>Pomona </h3>
-		      	<br />
+
 
 				<ul class="nav nav-stacked affix" id="sidebar">
-
-		        </ul>
-		        	<h3 class="no-margin">Next</h3><p><a href="getting_started.htm">Getting started</a></p>
-		        	
+<li>	<h3><img src="/content/images/pomona-icon-210.png" width="210" height="210" alt="Pomona " /></h3></li>
+		        	<li><h3 class="no-margin">Next</h3><p><a href="getting_started.htm">Getting started</a></p></li>
+		        	<li></li>
 
 		        </ul>
 		      </div><!--/left-->
 
 		      <!--right-->
 		      <div class="col-md-9">
-			      	<h1>Index <a href="https://github.com/Pomona/Pomona/blob/develop/documentation/index.md"  class="text-muted small pull-right fa fa-github" style="margin-top: 10px"> Edit on GitHub</a></h1>
+			      	<h1>Pomona <a href="https://github.com/Pomona/Pomona/blob/develop/documentation/index.md"  class="text-muted small pull-right fa fa-github" style="margin-top: 10px"> Edit on GitHub</a></h1>
 
 			      	<hr />
 
 			      	<div id="main-pane">
-			      		<h1>Introduction</h1>
+			      		<!--Title:Pomona-->
 <p>Pomona is a framework built for exposing a domain model in a RESTful and hypermedia-driven manner.</p>
 <p>It embraces the concept of convention over configuration, and provides opinioned defaults on how
 domain model objects is exposed as HTTP resources.</p>
@@ -89,6 +93,7 @@ domain model objects is exposed as HTTP resources.</p>
 as a RESTful web service.</p>
 <p>Pomona is built on top of <a href="http://nancyfx.org/">Nancy</a>, which is an excellent framework for building
 HTTP based services on .NET and Mono.</p>
+<!-- TODO: add sexy illustration -->
 <h2>Chapters</h2>
 <ul class="table-of-contents"><li><a href="getting_started.htm">Getting started</a></li><li><a href="configuration/index.htm">Configuration and bootstrapping</a><ul><li><a href="configuration/rules.htm">Fluent rules</a></li><li><a href="configuration/convention.htm">Changing conventions</a></li></ul></li><li><a href="handlers/index.htm">Resource handlers</a><ul><li><a href="handlers/datasource.htm">Data source</a></li></ul></li><li><a href="rest/index.htm">Using exposed service</a><ul><li><a href="rest/queries.htm">Queries</a></li><li><a href="rest/etags.htm">Concurrency control using ETags</a></li></ul></li><li><a href="generated_client.htm">Generated client</a></li><li><a href="internals.htm">Contributors guide</a></li></ul>
 
