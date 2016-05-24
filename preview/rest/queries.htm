@@ -89,7 +89,87 @@ using the a standard set of query parameters.</p>
 <ul>
 <li><code>$filter</code>: predicate expression</li>
 <li><code>$groupby</code>: group by expression</li>
-<li><code>$select</code>: selector expression</li>
+<li><code>$select</code>: selector expression(s)</li>
+<li><code>$orderby</code>: ordering expression(s)</li>
+<li><code>$projection</code>: projection, can be one of the following</li>
+<li><code>$expand</code>: property paths to expand</li>
+</ul>
+<h3>$filter</h3>
+<p>The <code>$filter</code> query parameter can be used to filter the results. The filter
+is applied before <code>groupby</code> and <code>$select</code>.</p>
+<pre><code class="language-git">$ curl 'http://localhost:1337/game-consoles?$filter=name%20eq%20%27Game%20Boy%27' -H &quot;Accept: application/json&quot;
+{
+  &quot;_type&quot;: &quot;__result__&quot;,
+  &quot;totalCount&quot;: -1,
+  &quot;items&quot;: [
+    {
+      &quot;_uri&quot;: &quot;http://localhost:1337/game-consoles/gameboy&quot;,
+      &quot;id&quot;: &quot;gameboy&quot;,
+      &quot;name&quot;: &quot;Game Boy&quot;
+    }
+  ],
+  &quot;skip&quot;: 0,
+  &quot;previous&quot;: null,
+  &quot;next&quot;: null
+}
+</code></pre>
+<h3>$select</h3>
+<p>The <code>$select</code> query parameter can be used for limiting the amount of data to retrieve,
+or for applying simple transformations.</p>
+<p>It accepts a comma separated list of expressions and names, of the pattern</p>
+<p><code>expr1 as name1,expr2 as name2</code></p>
+<p>The <code>as name</code> part is optional if the expression is a simple property reference, in which
+case the expression property name will be used as the name.</p>
+<p>The results will take the form of JSON objects with properties corresponding to the list
+of expressions in <code>$select</code>.</p>
+<pre><code class="language-git">$ curl 'http://localhost:1337/game-consoles?$select=id,toupper(name)%20as%20n' -H &quot;Accept: application/json&quot;
+{
+  &quot;_type&quot;: &quot;__result__&quot;,
+  &quot;totalCount&quot;: -1,
+  &quot;items&quot;: [
+    {
+      &quot;id&quot;: &quot;gameboy&quot;,
+      &quot;n&quot;: &quot;GAME BOY&quot;
+    },
+    {
+      &quot;id&quot;: &quot;nes&quot;,
+      &quot;n&quot;: &quot;NINTENDO ENTERTAINMENT SYSTEM&quot;
+    }
+  ],
+  &quot;skip&quot;: 0,
+  &quot;previous&quot;: null,
+  &quot;next&quot;: null
+}
+</code></pre>
+<p>When selecting just one value we can avoid wrapping it in an object by using the
+special form <code>expr as this</code>.</p>
+<pre><code class="language-git">$ curl 'http://localhost:1337/game-consoles?$select=toupper(name)%20as%20this' -H &quot;Accept: application/json&quot;
+{
+  &quot;_type&quot;: &quot;__result__&quot;,
+  &quot;totalCount&quot;: -1,
+  &quot;items&quot;: [
+    &quot;ATARI 2600&quot;,
+    &quot;GAME BOY&quot;,
+    &quot;NINTENDO ENTERTAINMENT SYSTEM&quot;
+  ],
+  &quot;skip&quot;: 0,
+  &quot;previous&quot;: null,
+  &quot;next&quot;: null
+}
+</code></pre>
+<h3>$projection</h3>
+<p>The <code>$projection</code> query parameter controls what projection will be applied
+to the query results.</p>
+<ul>
+<li><code>first</code>: First resource of result set, 404 if not found</li>
+<li><code>first</code>: Last resource of result set, 404 if not found</li>
+<li><code>single</code>: First and only resource of result set. 404 if not found, 400 if several found</li>
+<li><code>firstordefault</code>: First resource of result set, null</li>
+<li><code>lastordefault</code>: First resource of result set, null</li>
+<li><code>max</code>: Max value (only valid when <code>$select</code> expression returns a comparable value)</li>
+<li><code>min</code>: Min value (only valid when <code>$select</code> expression returns a comparable value)</li>
+<li><code>count</code>: Number of results</li>
+<li><code>sum</code>: Sum of results (only valid when <code>$select</code> expression returns a summable value)</li>
 </ul>
 <h2>Operators</h2>
 <h3>Boolean</h3>
