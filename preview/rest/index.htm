@@ -83,14 +83,176 @@
 			      	<div id="main-pane">
 			      		<!--Title:Using exposed service-->
 <!--Url:rest-->
-<p>Pomona exposes your web service using a JSON format.</p>
-<h1>Links</h1>
-<p>Links to other resources are wrapped inside a JSON object,
-which makes it possibly to distinguish them from other JSON strings.</p>
-<p>They can also contain a type hint for the referenced resource.</p>
+<h1>JSON hypermedia format</h1>
+<p>Pomona exposes your web service using a JSON format that follows certain
+conventions.</p>
+<h2>Resource metadata</h2>
+<p>For a resource the following properties has a special, reserved meaning:</p>
+<ul>
+<li><code>_uri</code>: The canonical URL of the resource</li>
+<li><code>_type</code>: Type of the resource</li>
+</ul>
+<pre><code class="language-javascript">{
+  &quot;_uri&quot;: &quot;http://some-service/users/123&quot;,
+  &quot;_type&quot;: &quot;User&quot;,
+  &quot;name&quot;: &quot;bob&quot;,
+  &quot;is_active&quot;: true
+}
+</code></pre>
+<h2>Links</h2>
+<p>Links to other resources are wrapped inside a JSON object with a <code>_ref</code> property,
+which makes it possible to detect them programmatically.</p>
+<p>They can also contain a <code>type</code> hint for the referenced resource.</p>
 <pre><code class="language-javascript">{
   &quot;_type&quot;: &quot;User&quot;,
   &quot;_ref&quot;: &quot;http://some-service/users/123&quot;
+}
+</code></pre>
+<h2>Resource collections</h2>
+<p>Resource collections are presented as JSON objects with an <code>items</code> that holds the
+contained resources in a JSON array.</p>
+<p>Properties:</p>
+<ul>
+<li><code>_type</code>: Will be set to <code>__result__</code></li>
+<li><code>totalCount</code>: Total count of all pages when <code>$totalcount</code> query parameter is set to <code>true</code>. Otherwise -1</li>
+<li><code>skip</code>: Number of elements to skip, specified using the <code>$skip</code> query parameter</li>
+<li><code>next</code>: Next page, <code>null</code> if current page is the last</li>
+<li><code>previous</code>: Previous page, <code>null</code> if current page is the first</li>
+</ul>
+<pre><code class="language-javascript">{
+  &quot;_type&quot;: &quot;__result__&quot;,
+  &quot;totalCount&quot;: -1,
+  &quot;items&quot;: [
+    {
+      &quot;_uri&quot;: &quot;http://localhost:1337/game-consoles/a2600&quot;,
+      &quot;id&quot;: &quot;a2600&quot;,
+      &quot;name&quot;: &quot;Atari 2600&quot;
+    },
+    {
+      &quot;_uri&quot;: &quot;http://localhost:1337/game-consoles/gameboy&quot;,
+      &quot;id&quot;: &quot;gameboy&quot;,
+      &quot;name&quot;: &quot;Game Boy&quot;
+    }
+  ],
+  &quot;skip&quot;: 0,
+  &quot;previous&quot;: null,
+  &quot;next&quot;: &quot;http://localhost:1337/game-consoles?$top=2&amp;$skip=2&quot;
+}
+</code></pre>
+<h2>Boxed value types</h2>
+<p>Because JSON has a limited number of primitive types, some values will be
+boxed.</p>
+<pre><code class="language-javascript">{
+  &quot;_type&quot;: &quot;Int64&quot;,
+  &quot;value&quot;: 23
+}
+</code></pre>
+<h1>Patching</h1>
+<p>Pomona uses a custom PATCH format, which feels intuitive and straight-forward
+for simple cases, and that also can support more advanced scenarios.</p>
+<h3>Property operators:</h3>
+<ul>
+<li><code>!</code> - Replaces a property (object or array). When setting to a value type this is always the default operation, making the <code>!</code> optional.</li>
+<li><code>*</code> - Patches the existing object of a property (object or array).</li>
+<li><code>-</code> - Removes a property.</li>
+</ul>
+<h3>Array operators:</h3>
+<ul>
+<li><code>-@</code> - Indicates that an object item is removed from array using specificied identifier.</li>
+<li><code>*@</code> - Indicates that an object item is to be located in array using specified identifier, and then patched.</li>
+<li>Default operation is to add something to an array.</li>
+</ul>
+<h3>Escaping:</h3>
+<p>Property names starting with <code>-</code>, <code>*</code>, <code>!</code>, <code>@</code> and <code>^</code> has to be escaped by putting <code>^</code> in front of it.</p>
+<h3>Examples</h3>
+<p>Original JSON document:</p>
+<pre><code class="language-javascript">{
+    &quot;info&quot;: { &quot;foo&quot;: &quot;fighter&quot;, &quot;crow&quot; : &quot;bar&quot; },
+    &quot;people&quot; : [
+        {
+            &quot;id&quot; : 1,
+            &quot;name&quot; : &quot;Joe&quot;,
+            &quot;pets&quot; : [
+                { &quot;race&quot; : &quot;Cat&quot;, &quot;name&quot; : &quot;Wendy&quot;, &quot;color&quot; : &quot;Black&quot; },
+                { &quot;race&quot; : &quot;Dog&quot;, &quot;name&quot; : &quot;Nana&quot;, &quot;color&quot; : &quot;Brown&quot; }
+            ]
+        },
+        { &quot;id&quot; : 2, &quot;name&quot; : &quot;Peter&quot; }
+    ],
+    &quot;attributes&quot; : {
+        &quot;goat&quot; : &quot;eat&quot;,
+        &quot;fish&quot; : &quot;swim&quot;,
+        &quot;-MUST_BE_ESCAPED-&quot; : &quot;nada&quot;
+    }
+}
+</code></pre>
+<p>Changing the <code>info</code> property (an object):</p>
+<pre><code class="language-javascript">{
+    &quot;*info&quot; : { &quot;foo&quot; : &quot;miauu&quot; }
+}
+</code></pre>
+<p>As changing members that are not arrays is the default operation, this also changes the <code>info</code> property:</p>
+<pre><code class="language-javascript">{
+    &quot;info&quot; : { &quot;foo&quot; : &quot;miauu&quot; }
+}
+</code></pre>
+<p>Replace the whole <code>info</code> property:</p>
+<pre><code class="language-javascript">{
+    &quot;!info&quot; : { &quot;foo&quot; : &quot;unknown&quot;, &quot;bar&quot; : &quot;hello&quot; }
+}
+</code></pre>
+<p>Removing the fish property from attributes:</p>
+<pre><code class="language-javascript">{
+    &quot;attributes&quot; : { &quot;-fish&quot; }
+}
+</code></pre>
+<p>Removing the fish property from attributes (property value is ignored):</p>
+<pre><code class="language-javascript">{
+    &quot;attributes&quot; : { &quot;-fish&quot; : {} }
+}
+</code></pre>
+<p>Replacing the strangely named &quot;-MUST_BE_ESCAPED-&quot; property from attributes requires escaping:</p>
+<pre><code class="language-javascript">{
+    &quot;attributes&quot; : { &quot;!^-MUST_BE_ESCAPED-&quot; : &quot;REPLACED!&quot; }
+}
+</code></pre>
+<p>Remove Joe from the <code>people</code> array:</p>
+<pre><code class="language-javascript">{
+    &quot;people&quot; : [{ &quot;-@id&quot; : 1 }]
+}
+</code></pre>
+<p>Change Peter in the <code>people</code> array:</p>
+<pre><code class="language-javascript">{
+    &quot;people&quot; : [{ &quot;*@id&quot; : 2, &quot;name&quot; : &quot;Peter Pan&quot; }]
+}
+</code></pre>
+<p>Another way to change Peter in the <code>people</code> array (before renaming him to &quot;Peter Pan&quot; as per the above example):</p>
+<pre><code class="language-javascript">{
+    &quot;people&quot; : [{ &quot;*@name&quot; : &quot;Peter&quot;, &quot;name&quot; : &quot;Peter Pan&quot; }]
+}
+</code></pre>
+<p>Add Nancy to the <code>people</code> array:</p>
+<pre><code class="language-javascript">{
+    &quot;people&quot; : [{ &quot;name&quot; : &quot;Nancy&quot; }]
+}
+</code></pre>
+<p>Replace the whole <code>people</code> property:</p>
+<pre><code class="language-javascript">{
+    &quot;!people&quot; : [{ &quot;name&quot; : &quot;Peter Pan&quot; }]
+}
+</code></pre>
+<p>Changing the color of the pet Wendy from black to red, adding the mouse Kipper and deleting Karl:</p>
+<pre><code class="language-javascript">{
+    &quot;*people&quot; : [
+        {
+            &quot;@id&quot; : 1,
+            &quot;pets&quot; : [
+                { &quot;race&quot; : &quot;Mouse&quot;, &quot;name&quot; : &quot;Kipper&quot;, &quot;color&quot; : &quot;Gray&quot; },
+                { &quot;*@name&quot; : &quot;Wendy&quot;, &quot;color&quot; : &quot;Red&quot; },
+                { &quot;-@name&quot; : &quot;Karl&quot; }
+            ]
+        }
+    ]
 }
 </code></pre>
 
