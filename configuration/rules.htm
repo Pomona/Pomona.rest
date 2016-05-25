@@ -193,7 +193,33 @@ which works for a majority of English words.</p>
         }
 </code></pre>
 <h1>Property options</h1>
-<p>TODO!</p>
+<p>We can change how a property will be exposed by using the <code>Include</code> method of
+<code>ITypeMappingConfigurator</code> with an <code>options</code> lambda argument specified.</p>
+<h2>Changing exposed name of property</h2>
+<p>To use a different name for a property when exposed you can use <code>Named</code> method.</p>
+<pre><code class="language-csharp">
+        public void IncludePropertyNamed(ITypeMappingConfigurator&lt;Customer&gt; customer)
+        {
+            customer.Include(x =&gt; x.Identifier, x =&gt; x.Named(&quot;Id&quot;));
+        }
+</code></pre>
+<h2>Using custom accessors</h2>
+<p>By using the following methods we can change how a property is accessed.</p>
+<ul>
+<li><code>OnGet</code>: Used when serializing from resource</li>
+<li><code>OnSet</code>: Used when deserializing to resource</li>
+<li><code>OnQuery</code>: For building LINQ queries, usually for properties not recognized by underlying LINQ provider</li>
+</ul>
+<pre><code class="language-csharp">
+        public void IncludePropertyWithCustomAccessors(ITypeMappingConfigurator&lt;Customer&gt; customer)
+        {
+            customer
+                .Include(x =&gt; x.Name, x =&gt; x
+                    .OnGet(y =&gt; y.Name.ToUpper())
+                    .OnSet((c, v) =&gt; c.Name = v.ToLower())
+                    .OnQuery(y =&gt; y.Name.ToUpper()));
+        }
+</code></pre>
 
 
                 </div>
