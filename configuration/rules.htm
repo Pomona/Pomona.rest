@@ -220,6 +220,22 @@ which works for a majority of English words.</p>
                     .OnQuery(y =&gt; y.Name.ToUpper()));
         }
 </code></pre>
+<h2>Expand</h2>
+<p>We can use <code>Expand</code> to configure whether, and how, resource(s) referenced by properties are
+included when serializing. It takes one parameter of type <code>ExpandMode</code>, which can have the
+following values:</p>
+<ul>
+<li><code>ExpandMode.Full</code>: For properties pointing to a single resource, it means expand that resource.
+For properties having a list of resources this means expand the list itself and every item.</li>
+<li><code>ExpandMode.Shallow</code>: Expands as list of references to resources. Only applicable to properties having a collection of resources.</li>
+</ul>
+<pre><code class="language-csharp">
+        public void ExpandProperty(ITypeMappingConfigurator&lt;Customer&gt; customer)
+        {
+            customer
+                .Include(x =&gt; x.Address, x =&gt; x.Expand(ExpandMode.Full));
+        }
+</code></pre>
 
 
                 </div>
